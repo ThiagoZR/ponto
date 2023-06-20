@@ -1,0 +1,25 @@
+{
+  "name": "ponto",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "axios": "^1.4.0",
+    "date-fns": "^2.30.0",
+    "date-fns-tz": "^2.0.0",
+    "pinia": "^2.1.4",
+    "vue": "^3.2.47"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.1.0",
+    "prettier": "^2.8.8",
+    "sass": "^1.63.4",
+    "sass-loader": "^13.3.2",
+    "vite": "^4.3.9"
+  }
+}
