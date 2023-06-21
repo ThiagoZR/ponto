@@ -54,7 +54,7 @@ import { useIdDetailStore } from '../store/store.js';
 // const idDetailStore = useIdDetailStore();
 // let idDetail = ref(null);
 
-const name = "Felipe";
+const name = ref('');
 const currentDate = ref(null);
 const formattedDate = ref('');
 const currentTime = ref('');
@@ -105,7 +105,7 @@ onMounted(() => {
     hasFui.value = JSON.parse(storedFui);
   }
 
-  // const idsToDelete = [1941]; // IDs que deseja deletar
+  // const idsToDelete = [1959]; // IDs que deseja deletar
   // deleteDetail(idsToDelete);
 
 });
@@ -121,6 +121,7 @@ async function login(){
 
     window.localStorage.setItem("accessToken", response.data.accessToken);
     token.value = response.data.accessToken
+    name.value = response.data.name
     return response;
 
   } catch (error){
@@ -195,10 +196,13 @@ async function postDetail(){
   hasClickedToday.value = items.value.some((item) => {
     const data = new Date();
     const day = String(data.getDate()).padStart(2, '0');
-    console.log(data)
+    
     const month = String(data.getMonth() + 1).padStart(2, '0');
     const year = String(data.getFullYear());
     const currentDate = `${day}/${month}/${year}`;  
+
+    console.log(currentDate)
+    console.log(item.date)
     return (
       currentDate === item.date
     );
@@ -210,7 +214,19 @@ async function postDetail(){
   if (hasClickedToday.value) {
     alert("Ponto já registrado!")
     // return;
-    
+  } else if(hasCheguei.value && !hasClickedToday.value){
+    sameDayIdDetail.value = null;
+    hasCheguei.value = false;
+    hasFuiAlmocar.value = false;
+    hasVoltei.value = false;
+    hasFui.value = false;
+
+    // Limpar valores do localStorage
+    localStorage.removeItem('sameDayIdDetail');
+    localStorage.removeItem('hasCheguei');
+    localStorage.removeItem('hasFuiAlmocar');
+    localStorage.removeItem('hasVoltei');
+    localStorage.removeItem('hasFui');
   } else {
 
     const data = {
@@ -348,9 +364,12 @@ th{
 
 tbody{
   tr{
+    border-bottom: 3px solid #1E5084;
     td{
       color: #000;
       padding: 10px;
+      border-left: 2px solid #1E5084;
+      text-align: center;
     }
   }
 }
@@ -359,12 +378,15 @@ tbody{
   flex-direction: column;
   font-size: 30px;
   font-weight: 700;
-  margin-left: 95px;
   .header{
     display: flex;
     flex-direction: row;
     align-items: center;
     margin-bottom: 45px;
+
+    .name{
+      margin-left: 60px;
+    }
   }
 
   .info {
