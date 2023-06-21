@@ -10,7 +10,7 @@ O projeto foi desenvolvido em Vue 3 com Vite.
 ##  Tecnologias utilizadas
 - Vue.js 3
 - Vite
-- Para realizar as requisições após o login foi utilizado o _axios_ e para enviar o token em todas utilizei o _interceptor_
+- Para realizar as requisições foi utilizado o _axios_ e para enviar o token em todas elas utilizei o _interceptor_
 - Para estilização foi utilizado _SCSS_
 
 ## O que foi possível implementar
