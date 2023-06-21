@@ -49,10 +49,6 @@ import { format } from "date-fns";
 import { zonedTimeToUtc } from 'date-fns-tz';
 import axios from "axios";
 import { http } from "../services/config"
-import { useIdDetailStore } from '../store/store.js';
-
-// const idDetailStore = useIdDetailStore();
-// let idDetail = ref(null);
 
 const name = ref('');
 const currentDate = ref(null);
@@ -159,7 +155,6 @@ async function getList() {
           return format(date, 'dd/MM/yyyy')
         }
 
-        console.log(id)
         return {
           id,
           date: formatarData(start),
@@ -201,15 +196,10 @@ async function postDetail(){
     const year = String(data.getFullYear());
     const currentDate = `${day}/${month}/${year}`;  
 
-    console.log(currentDate)
-    console.log(item.date)
     return (
       currentDate === item.date
     );
   });
-
-  console.log('hasClickedToday.value',hasClickedToday.value)
-
 
   if (hasClickedToday.value) {
     alert("Ponto já registrado!")
@@ -236,10 +226,8 @@ async function postDetail(){
     return http
       .post('/Timesheet', data)
       .then((response) => {
-        console.log(response);
         sameDayIdDetail.value = response.data.id;
 
-        // Salva o valor atualizado no localStorage
         localStorage.setItem('sameDayIdDetail', JSON.stringify(sameDayIdDetail.value));
 
         hasCheguei.value = true
@@ -259,8 +247,6 @@ async function putDetail(type){
   const idDetail = sameDayIdDetail.value;
   
     if(type === 'fuiAlmocar'){
-      console.log('hasCheguei.value',hasCheguei.value)
-      
       if (!hasCheguei.value || hasFuiAlmocar.value) {
         alert("Verifique se o ponto 'CHEGUEI' já foi registrado ou se você já registrou o ponto 'FUI ALMOÇAR'")
         return;
