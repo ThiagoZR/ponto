@@ -101,11 +101,13 @@ onMounted(() => {
     hasFui.value = JSON.parse(storedFui);
   }
 
-  // const idsToDelete = [1959]; // IDs que deseja deletar
+  // para realizar a exclusao dos registros desejados, pego o ID e passo no array abaixo
+  // const idsToDelete = [1962];
   // deleteDetail(idsToDelete);
 
 });
 
+// realiza o login do usuário, salvando o token no localStorage e pegando o nome para renderizar no template
 async function login(){
   try{
     const data = {
@@ -126,6 +128,7 @@ async function login(){
   }
 }
 
+// Chama a api para resgatar os dados posteriormentes salvos do usuário logado
 async function getList() {
   return http.get('/Timesheet')
     .then(function(response){
@@ -155,6 +158,8 @@ async function getList() {
           return format(date, 'dd/MM/yyyy')
         }
 
+        // Con esse console.log pego os ids dos registros existentes para ser possível deletá-los caso necessário
+        // console.log(id)
         return {
           id,
           date: formatarData(start),
@@ -164,20 +169,20 @@ async function getList() {
           end: item.end == undefined ? 'Sem registro' : formatarHorario(end)
         }
       })
-
-      
       return items
     }
   )
 }
 
 async function deleteDetail(ids) {
+  // Realizei um map nos ids trazidos como parametro, para ser possivel deletar mais que 1 se necessário
   const deletePromises = ids.map((id) => {
     return http.delete(`/Timesheet/${id}`);
   });
 
   try {
     const responses = await Promise.all(deletePromises);
+  // O console.log foi inserido para ver se houve sucesso, ou não, nas requisições realizadas
     console.log('IDs deletados com sucesso:', responses);
   } catch (error) {
     console.error('Erro ao deletar IDs:', error);
@@ -203,22 +208,23 @@ async function postDetail(){
 
   if (hasClickedToday.value) {
     alert("Ponto já registrado!")
-    // return;
+
   } else if(hasCheguei.value && !hasClickedToday.value){
+    // Caso seja o primeiro registro do dia, os valores das variáveis serão limpos
     sameDayIdDetail.value = null;
     hasCheguei.value = false;
     hasFuiAlmocar.value = false;
     hasVoltei.value = false;
     hasFui.value = false;
 
-    // Limpar valores do localStorage
+    // Limpa os valores do localStorage
     localStorage.removeItem('sameDayIdDetail');
     localStorage.removeItem('hasCheguei');
     localStorage.removeItem('hasFuiAlmocar');
     localStorage.removeItem('hasVoltei');
     localStorage.removeItem('hasFui');
-  } else {
 
+  } else {
     const data = {
       start: dateToPost.value,
     };
@@ -228,10 +234,13 @@ async function postDetail(){
       .then((response) => {
         sameDayIdDetail.value = response.data.id;
 
+        // Salva o id do ponto batido no localstorage
         localStorage.setItem('sameDayIdDetail', JSON.stringify(sameDayIdDetail.value));
 
+        // seta o valor na variável e logo em seguida salva no localstorage
         hasCheguei.value = true
         localStorage.setItem('hasCheguei', JSON.stringify(hasCheguei.value));
+
         window.location.reload();
       })
       .catch(function (error) {
@@ -244,9 +253,11 @@ async function postDetail(){
 async function putDetail(type){
   convertToISOString()
 
+  // seta no idDetail o valor passado anteriormente para sameDayIdDetail
   const idDetail = sameDayIdDetail.value;
   
     if(type === 'fuiAlmocar'){
+      // valida se o primeiro ponto foi batido e se o segundo não foi batido
       if (!hasCheguei.value || hasFuiAlmocar.value) {
         alert("Verifique se o ponto 'CHEGUEI' já foi registrado ou se você já registrou o ponto 'FUI ALMOÇAR'")
         return;
@@ -261,6 +272,7 @@ async function putDetail(type){
     }
 
     if(type === 'voltei'){
+      // valida se o segundo ponto foi batido e se o terceiro não foi batido
       if (!hasFuiAlmocar.value || hasVoltei.value) {
         alert("Verifique se o ponto 'FUI ALMOÇAR' já foi registrado ou se você já registrou o ponto 'VOLTEI'")
         return;
@@ -275,7 +287,7 @@ async function putDetail(type){
     } 
 
     if(type === 'fui'){
-
+      // valida se o terceiro ponto foi batido e se o quarto não foi batido
       if (!hasVoltei.value || hasFui.value) {
         alert("Verifique se o ponto 'VOLTEI' já foi registrado ou se você já registrou o ponto 'FUI'")
         return;
@@ -302,7 +314,7 @@ async function putDetail(type){
     )
 }
 
-
+// Pega a hora e data fornecida pelo sistema no momento em que é chamada
 function getCurrentDateAndHour() {
   const date = new Date();
   currentDate.value = date;
@@ -315,12 +327,14 @@ function getCurrentDateAndHour() {
 
 }
 
+// A função foi criada para transformar os valores de data e horas recebidos, no formato padrão ISO 8601, para assim ser salvo no bd
 function convertToISOString(){
   const date = new Date();
   dateToPost.value = date.toISOString();
   return dateToPost
 }
 
+// Valida qual será a classe aplicada na linha
 function rowColor(index){
   return index % 2 === 0 ? '-gray' : '-white';
 }
