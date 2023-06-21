@@ -1,7 +1,25 @@
-# Vue 3 + Vite
 
-This template should help get you started developing with Vue 3 in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+# Vue 3 + Vite 
 
-## Recommended IDE Setup
+O projeto foi desenvolvido em Vue 3 com Vite.
 
-- [VS Code](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+##  IDE recomendada + Plugin
+
+- [VS Code](https://code.visualstudio.com/) + [Vite](https://marketplace.visualstudio.com/items?itemName=antfu.vite)
+
+##  Tecnologias utilizadas
+- Vue.js 3
+- Vite
+- Para realizar as requisições após o login foi utilizado o _axios_ e para enviar o token em todas utilizei o _interceptor_
+- Para estilização foi utilizado _SCSS_
+
+## O que foi possível desenvolver
+Dentro do tempo determinado, foi possível desenvolver:
+- Realizar chamada da api para realizar o login;
+- Realizar o post (o primeiro registro);
+- Realizaar os puts (os demais registros do  mesmo dia);
+- Realizar a exclusão quando necessário
+
+## O que não foi possível desenvolver
+- Implementar o timer
+
